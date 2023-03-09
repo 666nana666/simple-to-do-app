@@ -1,6 +1,7 @@
-
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../cubit/auth_cubit.dart';
 
 class LoginPage extends StatefulWidget {
   static const String routeName = 'Login';
@@ -12,19 +13,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
-  Future<UserCredential?> signInWithEmailAndPassword(
-      String email, String password) async {
-    try {
-      final userCredential = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
-      return userCredential;
-    } on FirebaseAuthException catch (e) {
-      return null;
-    }
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -33,41 +29,64 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         title: const Text('Login Page'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-              ),
-            ),
-            TextField(
-              controller: passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Password',
-              ),
-            ),
-            const SizedBox(
-              height: 16.0,
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                UserCredential? userCredential =
-                await signInWithEmailAndPassword(
-                    emailController.text, passwordController.text);
-                if (userCredential != null) {
-                  // Navigate to Home Page
+      body: BlocConsumer<AuthCubit, AuthState>(
+        listener: (context, state) {
+          if (state is AuthError) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(state.message)));
+          }
+          else if(state is AuthSuccess){
 
-                }
-              },
-              child: const Text('Login'),
-            ),
-          ],
-        ),
+          }
+        },
+        builder: (context, state) {
+          if (state is AuthLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(
+                      labelText: 'Email',
+                    ),
+                  ),
+                  TextField(
+                    controller: _passwordController,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      labelText: 'Password',
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<AuthCubit>().login(
+                          email: _emailController.text.trim(),
+                          password: _passwordController.text.trim());
+                    },
+                    child: const Text('Login'),
+                  ),
+                  const SizedBox(height: 16.0),
+
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<AuthCubit>().register(
+                          email: _emailController.text.trim(),
+                          password: _passwordController.text.trim());
+                    },
+                    child: const Text('Register'),
+                  ),
+                ],
+              ),
+            );
+          }
+        },
       ),
     );
   }

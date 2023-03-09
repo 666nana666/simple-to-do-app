@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simpletodoapp/features/auth/presentation/pages/login_page.dart';
+import 'package:simpletodoapp/features/task/presentation/cubit/todo_cubit.dart';
+import 'package:simpletodoapp/features/task/presentation/pages/todo_page.dart';
 
 import 'core/di/service_locator.dart';
 import 'core/log/log.dart';
@@ -26,6 +28,10 @@ Future<void> main() async => runZonedGuarded<Future<void>>(
         runApp(MultiBlocProvider(providers: [
           BlocProvider<AuthCubit>(
             create: (context) => getIt<AuthCubit>(),
+            lazy: false,
+          ),
+          BlocProvider<TodoCubit>(
+            create: (context) => getIt<TodoCubit>(),
             lazy: false,
           ),
         ], child: const SimpleToDoApp()));
@@ -64,7 +70,7 @@ class _SimpleToDoAppState extends State<SimpleToDoApp> {
               return [
                 generateRoute(
                   const RouteSettings(
-                    name: LoginPage.routeName,
+                    name: TodoPage.routeName,
                   ),
                 ),
               ];
