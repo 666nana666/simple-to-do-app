@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:injectable/injectable.dart';
+import 'package:intl/intl.dart';
 
 part 'todo_state.dart';
 
@@ -23,6 +24,8 @@ class TodoCubit extends Cubit<TodoState> {
           final value = e.value as Map<dynamic, dynamic>;
           return Todo(
             id: key,
+            time: value['time'] ??
+                DateFormat('HH.mm d , MMM y').format(DateTime.now()),
             title: value['title'] as String,
             completed: value['completed'] as bool,
           );
@@ -41,6 +44,7 @@ class TodoCubit extends Cubit<TodoState> {
       final todo = Todo(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         title: title,
+        time: DateFormat('HH.mm d , MMM y').format(DateTime.now()),
         completed: false,
       );
       print(todo.toJson());
@@ -72,10 +76,12 @@ class TodoCubit extends Cubit<TodoState> {
 class Todo {
   final String id;
   final String title;
+  final String time;
   final bool completed;
 
   Todo({
     required this.id,
+    required this.time,
     required this.title,
     required this.completed,
   });
@@ -83,6 +89,7 @@ class Todo {
   Map<String, dynamic> toJson() {
     return {
       'title': title,
+      'time': time,
       'completed': completed,
     };
   }
@@ -90,10 +97,12 @@ class Todo {
   Todo copyWith({
     String? id,
     String? title,
+    String? time,
     bool? completed,
   }) {
     return Todo(
       id: id ?? this.id,
+      time: time ?? this.time,
       title: title ?? this.title,
       completed: completed ?? this.completed,
     );

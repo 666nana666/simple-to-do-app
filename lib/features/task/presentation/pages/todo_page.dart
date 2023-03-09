@@ -1,7 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simpletodoapp/core/di/service_locator.dart';
+import 'package:simpletodoapp/core/navigator/navigation.dart';
+import 'package:simpletodoapp/core/theme/app_colors.dart';
+import 'package:simpletodoapp/core/theme/text_style.dart';
+import 'package:simpletodoapp/features/auth/presentation/pages/login_page.dart';
 
 import '../cubit/todo_cubit.dart';
 
@@ -19,30 +24,48 @@ class TodoPage extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Todo List'),
+            backgroundColor: AppColors.primary,
+            centerTitle: true,
+            title: Text(
+              'Todo List',
+              style: AppTextStyle.headingBold20(
+                AppColors.textWhite,
+              ),
+            ),
             actions: [
               IconButton(
                 icon: const Icon(Icons.logout),
                 onPressed: () async {
                   await FirebaseAuth.instance.signOut();
-                  Navigator.of(context).popUntil((route) => route.isFirst);
+                  getIt<NavigationService>().pushNamedAndRemoveUntil(
+                    LoginPage.routeName,
+                  );
                 },
               )
             ],
           ),
           body: body(todoCubit, state),
           floatingActionButton: FloatingActionButton(
-            child: const Icon(Icons.add),
+            child: const Icon(
+              Icons.add,
+            ),
+            backgroundColor: AppColors.primary,
             onPressed: () async {
               final TextEditingController controller = TextEditingController();
               await showDialog(
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    title: const Text('Add Todo'),
+                    title: Text(
+                      'Add Todo',
+                      style: AppTextStyle.headingBold14(),
+                    ),
                     content: TextFormField(
                       controller: controller,
-                      decoration: const InputDecoration(hintText: 'Todo title'),
+                      decoration: InputDecoration(
+                        hintText: 'Todo title',
+                        hintStyle: AppTextStyle.bodyRegular12(),
+                      ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter a title';
@@ -88,19 +111,53 @@ class TodoPage extends StatelessWidget {
         itemCount: state.todos.length,
         itemBuilder: (context, index) {
           final Todo todo = state.todos[index];
-          return ListTile(
-            title: Text(todo.title),
-            leading: Checkbox(
-              value: todo.completed,
-              onChanged: (_) async {
-                await todoCubit.toggleTodoComplete(todo: todo);
-              },
+          return Container(
+            margin: EdgeInsets.only(
+              right: 12.w,
+              left: 12.w,
+              top: 12.h,
             ),
-            trailing: IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () async {
-                await todoCubit.deleteTodo(todo: todo);
-              },
+            padding: EdgeInsets.symmetric(
+              vertical: 2.h,
+              horizontal: 12.w,
+            ),
+            decoration: BoxDecoration(
+              color: AppColors.border,
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: Row(
+              children: [
+                Checkbox(
+                  value: todo.completed,
+                  activeColor: Colors.white,
+                  checkColor: Colors.black,
+                  onChanged: (_) async {
+                    await todoCubit.toggleTodoComplete(todo: todo);
+                  },
+                ),
+                8.horizontalSpace,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        todo.title,
+                        style: AppTextStyle.headingBold20(),
+                      ),
+                      Text(
+                        todo.time,
+                        style: AppTextStyle.bodyRegular12(),
+                      ),
+                    ],
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.delete_outline, color: AppColors.iconGrey),
+                  onPressed: () async {
+                    await todoCubit.deleteTodo(todo: todo);
+                  },
+                ),
+              ],
             ),
           );
         },

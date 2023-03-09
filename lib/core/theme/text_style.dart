@@ -71,6 +71,17 @@ class AppTextStyle {
         fontSize: 24,
       );
 
+  static TextStyle headingBold34([
+    Color color = AppColors.textPrimary,
+  ]) =>
+      _base(
+        color: color,
+        fontWeight: FontWeight.w700,
+        letterSpacing: -0.1,
+        height: 1.35,
+        fontSize: 34,
+      );
+
   static TextStyle headingBold20([
     Color color = AppColors.textPrimary,
   ]) =>

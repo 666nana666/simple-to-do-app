@@ -29,7 +29,7 @@ class AuthCubit extends Cubit<AuthState> {
       const Duration(seconds: 1),
       () {
         if (user != null) {
-          getIt<NavigationService>().pushNamed(TodoPage.routeName);
+          getIt<NavigationService>().pushNamedAndRemoveUntil(TodoPage.routeName);
         } else {
           // user is not logged in
           print('User is not logged in');

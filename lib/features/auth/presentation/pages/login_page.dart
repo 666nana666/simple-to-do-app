@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simpletodoapp/core/di/service_locator.dart';
 import 'package:simpletodoapp/core/navigator/navigation.dart';
+import 'package:simpletodoapp/core/theme/app_colors.dart';
+import 'package:simpletodoapp/core/theme/text_style.dart';
 import 'package:simpletodoapp/features/task/presentation/pages/todo_page.dart';
 
 import '../cubit/auth_cubit.dart';
@@ -35,9 +38,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login Page'),
-      ),
       body: BlocConsumer<AuthCubit, AuthState>(
         bloc: getIt<AuthCubit>(),
         listener: (context, state) {
@@ -45,7 +45,8 @@ class _LoginPageState extends State<LoginPage> {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(state.message)));
           } else if (state is AuthSuccess) {
-            getIt<NavigationService>().pushNamed(TodoPage.routeName);
+            getIt<NavigationService>()
+                .pushNamedAndRemoveUntil(TodoPage.routeName);
           }
         },
         builder: (context, state) {
@@ -57,38 +58,107 @@ class _LoginPageState extends State<LoginPage> {
             return Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  72.verticalSpace,
+                  Text('Login or \nCreate Account',
+                      style: AppTextStyle.headingBold34()),
+                  32.verticalSpace,
                   TextField(
                     controller: _emailController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Email',
+                      labelStyle: AppTextStyle.bodyRegular14(),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4.r),
+                        borderSide:
+                            BorderSide(color: AppColors.border, width: 2.w),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4.r),
+                        borderSide:
+                            BorderSide(color: AppColors.border, width: 2.w),
+                      ),
                     ),
                   ),
+                  22.verticalSpace,
                   TextField(
                     controller: _passwordController,
                     obscureText: true,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Password',
+                      labelStyle: AppTextStyle.bodyRegular14(),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4.r),
+                        borderSide:
+                            BorderSide(color: AppColors.border, width: 2.w),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4.r),
+                        borderSide:
+                            BorderSide(color: AppColors.border, width: 2.w),
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 16.0),
-                  ElevatedButton(
-                    onPressed: () {
+                  32.verticalSpace,
+                  InkWell(
+                    onTap: () {
                       context.read<AuthCubit>().login(
                           email: _emailController.text.trim(),
                           password: _passwordController.text.trim());
                     },
-                    child: const Text('Login'),
+                    child: Container(
+                      width: 1.sw,
+                      alignment: Alignment.center,
+                      decoration: buttonDecoration(),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 12.h, horizontal: 20.w),
+                      child: Text('Login',
+                          style:
+                              AppTextStyle.headingBold16(AppColors.textWhite)),
+                    ),
                   ),
-                  const SizedBox(height: 16.0),
-                  ElevatedButton(
-                    onPressed: () {
+                  12.verticalSpace,
+                  Row(
+                    children: [
+                      const Expanded(
+                        child: Divider(
+                          height: 1,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                      12.horizontalSpace,
+                      Text(
+                        'OR',
+                        style:
+                            AppTextStyle.bodyRegular14(AppColors.textSecondary),
+                      ),
+                      12.horizontalSpace,
+                      const Expanded(
+                        child: Divider(
+                          height: 1,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                  12.verticalSpace,
+                  InkWell(
+                    onTap: () {
                       context.read<AuthCubit>().register(
                           email: _emailController.text.trim(),
                           password: _passwordController.text.trim());
                     },
-                    child: const Text('Register'),
+                    child: Container(
+                      width: 1.sw,
+                      alignment: Alignment.center,
+                      decoration: buttonDecoration(),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 12.h, horizontal: 20.w),
+                      child: Text('Register',
+                          style:
+                              AppTextStyle.headingBold16(AppColors.textWhite)),
+                    ),
                   ),
                 ],
               ),
@@ -96,6 +166,13 @@ class _LoginPageState extends State<LoginPage> {
           }
         },
       ),
+    );
+  }
+
+  Decoration buttonDecoration() {
+    return BoxDecoration(
+      color: AppColors.primary,
+      borderRadius: BorderRadius.circular(8.r),
     );
   }
 }
