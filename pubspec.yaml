@@ -67,6 +67,7 @@ dependencies:
   flutter_hooks: ^0.18.5+1
   firebase_auth: ^3.11.2
   firebase_database: ^9.1.7
+  hive: ^2.2.3
 
 
 dev_dependencies:

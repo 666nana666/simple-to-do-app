@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "477018110147",
+    "firebase_url": "https://simpletodoapp-a1c36-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "simpletodoapp-a1c36",
     "storage_bucket": "simpletodoapp-a1c36.appspot.com"
   },
@@ -29,6 +30,13 @@
             {
               "client_id": "477018110147-9955i71t86p26nrj53qhseev9082bi95.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "477018110147-paraebi77icjqije16d0agrmliqh0ul2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mobee.simpletodoapp"
+              }
             }
           ]
         }

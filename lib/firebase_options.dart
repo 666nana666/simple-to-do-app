@@ -54,6 +54,7 @@ class DefaultFirebaseOptions {
     appId: '1:477018110147:android:c591ec26517fb8339c0a76',
     messagingSenderId: '477018110147',
     projectId: 'simpletodoapp-a1c36',
+    databaseURL: 'https://simpletodoapp-a1c36-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'simpletodoapp-a1c36.appspot.com',
   );
 
@@ -62,6 +63,7 @@ class DefaultFirebaseOptions {
     appId: '1:477018110147:ios:49344da521ac06619c0a76',
     messagingSenderId: '477018110147',
     projectId: 'simpletodoapp-a1c36',
+    databaseURL: 'https://simpletodoapp-a1c36-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'simpletodoapp-a1c36.appspot.com',
     iosClientId: '477018110147-paraebi77icjqije16d0agrmliqh0ul2.apps.googleusercontent.com',
     iosBundleId: 'com.mobee.simpletodoapp',

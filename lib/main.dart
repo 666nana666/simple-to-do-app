@@ -70,7 +70,7 @@ class _SimpleToDoAppState extends State<SimpleToDoApp> {
               return [
                 generateRoute(
                   const RouteSettings(
-                    name: TodoPage.routeName,
+                    name: LoginPage.routeName,
                   ),
                 ),
               ];

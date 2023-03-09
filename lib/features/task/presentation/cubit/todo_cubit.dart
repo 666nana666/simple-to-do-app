@@ -13,7 +13,9 @@ class TodoCubit extends Cubit<TodoState> {
   TodoCubit() : super(TodoInitial()) {
     final User? user = _auth.currentUser;
     if (user != null) {
-      _todoRef = FirebaseDatabase.instance.reference().child('users/${user.uid}/todos');
+      _todoRef = FirebaseDatabase.instance
+          .reference()
+          .child('users/${user.uid}/todos');
       _todoRef.onValue.listen((event) {
         final data = event.snapshot.value as Map<dynamic, dynamic>?;
         final todos = data?.entries.map((e) {
@@ -28,19 +30,23 @@ class TodoCubit extends Cubit<TodoState> {
 
         emit(TodoLoaded(todos: todos ?? []));
       });
+    }else{
+
     }
   }
 
   Future<void> addTodo({required String title}) async {
+    print("error $title");
     try {
       final todo = Todo(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         title: title,
         completed: false,
       );
-
+      print(todo.toJson());
       await _todoRef.child(todo.id).set(todo.toJson());
     } catch (e) {
+      print("error $e");
       emit(TodoError(message: 'Failed to add todo'));
     }
   }

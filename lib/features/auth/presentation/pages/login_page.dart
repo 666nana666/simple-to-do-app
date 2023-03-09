@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:simpletodoapp/core/di/service_locator.dart';
+import 'package:simpletodoapp/core/navigator/navigation.dart';
+import 'package:simpletodoapp/features/task/presentation/pages/todo_page.dart';
 
 import '../cubit/auth_cubit.dart';
 
@@ -17,6 +20,12 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<AuthCubit>(context).checkLoginStatus();
+  }
+
+  @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
@@ -30,13 +39,13 @@ class _LoginPageState extends State<LoginPage> {
         title: const Text('Login Page'),
       ),
       body: BlocConsumer<AuthCubit, AuthState>(
+        bloc: getIt<AuthCubit>(),
         listener: (context, state) {
           if (state is AuthError) {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(state.message)));
-          }
-          else if(state is AuthSuccess){
-
+          } else if (state is AuthSuccess) {
+            getIt<NavigationService>().pushNamed(TodoPage.routeName);
           }
         },
         builder: (context, state) {
@@ -73,7 +82,6 @@ class _LoginPageState extends State<LoginPage> {
                     child: const Text('Login'),
                   ),
                   const SizedBox(height: 16.0),
-
                   ElevatedButton(
                     onPressed: () {
                       context.read<AuthCubit>().register(

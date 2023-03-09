@@ -80,13 +80,11 @@ class TodoPage extends StatelessWidget {
 
   Widget body(TodoCubit todoCubit, TodoState state) {
     if (state is TodoLoading) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
+      return const Center(
+        child: CircularProgressIndicator(),
       );
     } else if (state is TodoLoaded) {
-      ListView.builder(
+     return ListView.builder(
         itemCount: state.todos.length,
         itemBuilder: (context, index) {
           final Todo todo = state.todos[index];
@@ -108,10 +106,8 @@ class TodoPage extends StatelessWidget {
         },
       );
     } else if (state is TodoError) {
-      return Scaffold(
-        body: Center(
-          child: Text(state.message),
-        ),
+      return Center(
+        child: Text(state.message),
       );
     }
 
