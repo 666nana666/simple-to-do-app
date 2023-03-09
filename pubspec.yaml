@@ -66,6 +66,7 @@ dependencies:
   flutter_countdown_timer: ^4.1.0
   flutter_hooks: ^0.18.5+1
   firebase_auth: ^3.11.2
+  firebase_database: ^9.1.7
 
 
 dev_dependencies:

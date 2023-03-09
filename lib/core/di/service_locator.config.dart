@@ -8,14 +8,16 @@
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 import 'package:logger/logger.dart' as _i5;
-import 'package:simpletodoapp/core/di/register_module.dart' as _i10;
+import 'package:simpletodoapp/core/di/register_module.dart' as _i11;
 import 'package:simpletodoapp/core/firebase/crashlytics.dart' as _i4;
-import 'package:simpletodoapp/core/log/log.dart' as _i9;
+import 'package:simpletodoapp/core/log/log.dart' as _i10;
 import 'package:simpletodoapp/core/messenger/messenger.dart' as _i6;
 import 'package:simpletodoapp/core/navigator/navigation.dart' as _i7;
 import 'package:simpletodoapp/core/network/network_module.dart' as _i8;
 import 'package:simpletodoapp/features/auth/presentation/cubit/auth_cubit.dart'
-    as _i3; // ignore_for_file: unnecessary_lambdas
+    as _i3;
+import 'package:simpletodoapp/features/task/presentation/cubit/todo_cubit.dart'
+    as _i9; // ignore_for_file: unnecessary_lambdas
 
 // ignore_for_file: lines_longer_than_80_chars
 /// initializes the registration of provided dependencies inside of [GetIt]
@@ -36,8 +38,9 @@ _i1.GetIt $initGetIt(
   gh.lazySingleton<_i6.MessengerService>(() => _i6.MessengerService());
   gh.lazySingleton<_i7.NavigationService>(() => _i7.NavigationService());
   gh.lazySingleton<_i8.NetworkModule>(() => _i8.NetworkModuleImpl());
-  gh.lazySingleton<_i9.Log>(() => _i9.Log(get<_i5.Logger>()));
+  gh.factory<_i9.TodoCubit>(() => _i9.TodoCubit());
+  gh.lazySingleton<_i10.Log>(() => _i10.Log(get<_i5.Logger>()));
   return get;
 }
 
-class _$RegisterModule extends _i10.RegisterModule {}
+class _$RegisterModule extends _i11.RegisterModule {}
