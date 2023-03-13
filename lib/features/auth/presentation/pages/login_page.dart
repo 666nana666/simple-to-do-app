@@ -39,7 +39,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocConsumer<AuthCubit, AuthState>(
-        bloc: getIt<AuthCubit>(),
         listener: (context, state) {
           if (state is AuthError) {
             ScaffoldMessenger.of(context)
@@ -103,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                   32.verticalSpace,
                   InkWell(
                     onTap: () {
-                      context.read<AuthCubit>().login(
+                      BlocProvider.of<AuthCubit>(context).login(
                           email: _emailController.text.trim(),
                           password: _passwordController.text.trim());
                     },
@@ -145,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
                   12.verticalSpace,
                   InkWell(
                     onTap: () {
-                      context.read<AuthCubit>().register(
+                      BlocProvider.of<AuthCubit>(context).register(
                           email: _emailController.text.trim(),
                           password: _passwordController.text.trim());
                     },

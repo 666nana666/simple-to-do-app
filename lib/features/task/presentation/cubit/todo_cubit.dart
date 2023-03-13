@@ -8,11 +8,14 @@ part 'todo_state.dart';
 
 @Injectable()
 class TodoCubit extends Cubit<TodoState> {
-  late final DatabaseReference _todoRef;
+  late DatabaseReference _todoRef;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  TodoCubit() : super(TodoInitial()) {
+  TodoCubit() : super(TodoInitial());
+
+  void getUser(){
     final User? user = _auth.currentUser;
+    print("test${user?.uid}");
     if (user != null) {
       _todoRef = FirebaseDatabase.instance
           .reference()
@@ -35,9 +38,7 @@ class TodoCubit extends Cubit<TodoState> {
       });
     }else{
 
-    }
-  }
-
+    }}
   Future<void> addTodo({required String title}) async {
     print("error $title");
     try {

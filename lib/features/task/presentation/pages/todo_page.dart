@@ -10,15 +10,23 @@ import 'package:simpletodoapp/features/auth/presentation/pages/login_page.dart';
 
 import '../cubit/todo_cubit.dart';
 
-class TodoPage extends StatelessWidget {
+class TodoPage extends StatefulWidget {
   static const routeName = 'todo_page';
 
   const TodoPage({Key? key}) : super(key: key);
 
   @override
+  State<TodoPage> createState() => _TodoPageState();
+}
+
+class _TodoPageState extends State<TodoPage> {
+  @override
+  void initState() {
+    super.initState();BlocProvider.of<TodoCubit>(context).getUser();
+  }
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<TodoCubit, TodoState>(
-      bloc: getIt<TodoCubit>(),
       builder: (context, state) {
         final TodoCubit todoCubit = BlocProvider.of<TodoCubit>(context);
 
